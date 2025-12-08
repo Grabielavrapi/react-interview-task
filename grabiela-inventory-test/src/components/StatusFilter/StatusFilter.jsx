@@ -8,6 +8,7 @@ export default function StatusFilter({ value, onChange }) {
                 <MenuItem value="all">All</MenuItem>
                 <MenuItem value="On Road">On Road</MenuItem>
                 <MenuItem value="On Hold">On Hold</MenuItem>
+                <MenuItem value="In Progress">In Progress</MenuItem>
                 <MenuItem value="Completed">Completed</MenuItem>
             </Select>
         </FormControl>

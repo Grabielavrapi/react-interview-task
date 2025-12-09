@@ -5,17 +5,17 @@ import MultiSelectDropdown from '../shared/MultiSelectDropdown.jsx';
 import StatusDropdown from '../shared/StatusDropdown.jsx';
 import Button from '../shared/Button.jsx';
 
-const categories = ['Electrical', 'Plumbing', 'HVAC', 'Drywall', 'Painting'];
+const categories = ['Sidewalk Shed', 'Scaffold', 'Shoring'];
 
 export default function CreateJobsiteModal({ onClose }) {
     const [name, setName] = useState('');
     const [selectedCategories, setSelectedCategories] = useState([]);
-    const [status, setStatus] = useState('On Hold');
+    const [status, setStatus] = useState('');
 
     const addJobsite = useStore(state => state.addJobsite);
 
     const handleSave = () => {
-        if (name.trim()) {
+        if (name.trim() && status) {
             addJobsite({ name: name.trim(), status, categories: selectedCategories });
             onClose();
         }
@@ -25,24 +25,24 @@ export default function CreateJobsiteModal({ onClose }) {
         <div className="modal-overlay" onClick={onClose}>
             <div className="modal" onClick={e => e.stopPropagation()}>
                 <div className="modal-header">
-                    <h3>Create Job Site</h3>
+                    <h3>Title</h3>
                     <button onClick={onClose}><FaTimes /></button>
                 </div>
 
                 <div className="modal-body">
                     <div className="info-text">
                         <FaInfoCircle className="icon" />
-                        <span>Fill in the details below to create a new job site. You can specify the name, categories, and the current status of the job site.</span>
+                        <span>Informative piece of text that can be used regarding this modal.</span>
                     </div>
 
-                    <div style={{ margin: '20px 0' }}>
+                    <div className="form-field">
                         <label>Name</label>
                         <input
                             type="text"
                             value={name}
                             onChange={e => setName(e.target.value)}
-                            placeholder="Type jobsite's name"
-                            style={{ width: '100%', padding: '12px', borderRadius: '8px', border: '1px solid #ccc', marginTop: '8px' }}
+                            placeholder="Type the jobsite's name"
+                            className="modal-input"
                         />
                     </div>
 
@@ -65,7 +65,7 @@ export default function CreateJobsiteModal({ onClose }) {
 
                 <div className="modal-footer">
                     <Button text="Cancel Changes" color="red" icon="cancel" onClick={onClose} />
-                    <Button text="Save Changes" color="green" icon="check" onClick={handleSave} disabled={!name.trim()} />
+                    <Button text="Save Changes" color="green" icon="check" onClick={handleSave} disabled={!name.trim() || !status} />
                 </div>
             </div>
         </div>

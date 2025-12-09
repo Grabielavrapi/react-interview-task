@@ -1,10 +1,11 @@
 // src/pages/InventoryPage.jsx
 import { useParams, useNavigate } from 'react-router-dom';
 import { useState } from 'react';
-import { FaChevronLeft, FaCheck, FaTimes } from 'react-icons/fa';
+import { FaCheck, FaTimes } from 'react-icons/fa';
 import { useStore } from '../context/InventoryStore';
 import SearchBar from '../components/SearchBar/SearchBar';
 import EditItemModal from '../components/modals/EditItemModal';
+import Button from '../components/shared/Button';
 
 export default function InventoryPage() {
     const { jobsiteId } = useParams();
@@ -60,9 +61,14 @@ export default function InventoryPage() {
                             {selectedCategory === cat && <FaCheck className="check-icon" />}
                         </button>
                     ))}
-                    <button className="go-back-button" onClick={() => navigate('/')}>
-                        <FaChevronLeft /> Go Back
-                    </button>
+                    <div style={{ marginTop: 'auto' }}>
+                        <Button
+                            text="Go Back"
+                            color="blue"
+                            icon="back"
+                            onClick={() => navigate('/')}
+                        />
+                    </div>
                 </div>
             </div>
 
@@ -93,21 +99,21 @@ export default function InventoryPage() {
                             <table>
                                 <thead>
                                 <tr>
+                                    <th>Nr.</th>
                                     <th>Item</th>
                                     <th>Quantity</th>
-                                    <th>Unit</th>
-                                    <th>Ordered</th>
-                                    <th>Received</th>
+                                    <th>Description</th>
+                                    <th>Notes</th>
                                 </tr>
                                 </thead>
                                 <tbody>
-                                {filteredItems.map(item => (
+                                {filteredItems.map((item, index) => (
                                     <tr key={item.id} onDoubleClick={() => handleDoubleClick(item)}>
+                                        <td>{index + 1}</td>
                                         <td>{item.item}</td>
                                         <td>{item.quantity}</td>
-                                        <td>{item.unit}</td>
-                                        <td>{item.ordered}</td>
-                                        <td>{item.received}</td>
+                                        <td>{item.description || 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.'}</td>
+                                        <td>{item.notes || 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.'}</td>
                                     </tr>
                                 ))}
                                 </tbody>
@@ -128,18 +134,16 @@ export default function InventoryPage() {
             </div>
 
             {/* EDIT MODAL */}
-            {editingItem && (
-                <EditItemModal
-                    open={editModalOpen}
-                    onClose={() => {
-                        setEditModalOpen(false);
-                        setEditingItem(null);
-                    }}
-                    item={editingItem}
-                    categoryName={editingItem.category}
-                    jobsiteId={Number(jobsiteId)}
-                />
-            )}
+            <EditItemModal
+                open={editModalOpen}
+                onClose={() => {
+                    setEditModalOpen(false);
+                    setEditingItem(null);
+                }}
+                item={editingItem}
+                categoryName={editingItem?.category}
+                jobsiteId={Number(jobsiteId)}
+            />
         </div>
     );
 }

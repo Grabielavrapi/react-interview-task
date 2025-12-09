@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { FaChevronDown, FaChevronUp } from 'react-icons/fa';
+import { FaChevronDown } from 'react-icons/fa';
 
-const StatusDropdown = ({ value, onSelect }) => {
+const StatusDropdown = ({ value, onChange }) => {
     const [isOpen, setIsOpen] = useState(false);
     const wrapperRef = useRef(null);
 
@@ -21,7 +21,7 @@ const StatusDropdown = ({ value, onSelect }) => {
     return (
         <div className="status-dropdown-container" ref={wrapperRef}>
             <div
-                className="status-trigger"
+                className={`status-trigger ${isOpen ? 'open' : ''}`}
                 onClick={() => setIsOpen(!isOpen)}
             >
                 <div>
@@ -29,23 +29,27 @@ const StatusDropdown = ({ value, onSelect }) => {
             {value || "Select one"}
           </span>
                 </div>
-                {isOpen ? <FaChevronUp className="arrow-icon" /> : <FaChevronDown className="arrow-icon" />}
+                <FaChevronDown className={`arrow-icon ${isOpen ? 'open' : ''}`} />
             </div>
 
             {isOpen && (
                 <ul className="status-dropdown-menu">
-                    {statusOptions.map(option => (
-                        <li
-                            key={option}
-                            className={`dropdown-item ${option === value ? 'selected-option' : ''}`}
-                            onClick={() => {
-                                onSelect(option);
-                                setIsOpen(false);
-                            }}
-                        >
-                            {option}
-                        </li>
-                    ))}
+                    {statusOptions.map(option => {
+                        const optionClass = option.toLowerCase().replace(' ', '-');
+                        const isSelected = option === value;
+                        return (
+                            <li
+                                key={option}
+                                className={`dropdown-item ${isSelected ? `selected-option ${optionClass}-selected` : `${optionClass}-option`}`}
+                                onClick={() => {
+                                    onChange(option);
+                                    setIsOpen(false);
+                                }}
+                            >
+                                {option}
+                            </li>
+                        );
+                    })}
                 </ul>
             )}
         </div>

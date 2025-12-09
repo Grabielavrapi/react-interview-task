@@ -15,7 +15,7 @@ export default function SearchBar({ value, onChange, placeholder = "Search..." }
                     </InputAdornment>
                 ),
             }}
-            sx={{ width: 300 }}
+            sx={{ width: 500 }}
         />
     );
 }

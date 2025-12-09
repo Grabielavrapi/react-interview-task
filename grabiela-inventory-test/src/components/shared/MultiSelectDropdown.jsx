@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { FaChevronDown, FaTimes, FaCheck } from 'react-icons/fa';
+import { FaChevronDown, FaCheck, FaTimes } from 'react-icons/fa';
 
 const MultiSelectDropdown = ({ options, selectedOptions, onSelect, onDeselect }) => {
     const [isOpen, setIsOpen] = useState(false);
@@ -28,13 +28,36 @@ const MultiSelectDropdown = ({ options, selectedOptions, onSelect, onDeselect })
         }
     };
 
+    const getOptionClass = (option) => {
+        return option.toLowerCase().replace(/\s+/g, '-');
+    };
+
+    const handleRemovePill = (e, option) => {
+        e.stopPropagation();
+        onDeselect(option);
+    };
+
     return (
         <div className="multi-select-container" ref={wrapperRef}>
-            <div className="select-trigger" onClick={() => setIsOpen(!isOpen)}>
-        <span className="placeholder">
-          {allSelected ? "All of them selected" : "Category Included"}
-        </span>
-                <FaChevronDown className="arrow-icon" />
+            <div className={`select-trigger ${isOpen ? 'open' : ''}`} onClick={() => setIsOpen(!isOpen)}>
+                {selectedOptions.length === 0 ? (
+                    <span className="placeholder">Select</span>
+                ) : allSelected ? (
+                    <span className="placeholder">All of them selected</span>
+                ) : (
+                    <div className="selected-pills-inline">
+                        {selectedOptions.map(option => (
+                            <span key={option} className={`category-pill ${getOptionClass(option)}`}>
+                                {option}
+                                <FaTimes
+                                    className="remove-icon"
+                                    onClick={(e) => handleRemovePill(e, option)}
+                                />
+                            </span>
+                        ))}
+                    </div>
+                )}
+                <FaChevronDown className={`arrow-icon ${isOpen ? 'open' : ''}`} />
             </div>
 
             {isOpen && (
@@ -42,7 +65,7 @@ const MultiSelectDropdown = ({ options, selectedOptions, onSelect, onDeselect })
                     {options.map(option => (
                         <div
                             key={option}
-                            className={`dropdown-item ${isSelected(option) ? 'active' : ''}`}
+                            className={`dropdown-item ${isSelected(option) ? `active ${getOptionClass(option)}` : ''}`}
                             onClick={() => handleItemClick(option)}
                         >
                             <span className="item-text">{option}</span>

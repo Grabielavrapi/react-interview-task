@@ -27,7 +27,6 @@ const initialInventory = {
             },
         ],
     },
-    // Mund të shtosh edhe për jobsite të tjera më vonë
 };
 
 export const useStore = create((set) => ({

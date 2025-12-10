@@ -1,8 +1,10 @@
 import { useState } from 'react';
 import { FaTimes, FaInfoCircle } from 'react-icons/fa';
-import { Dialog, DialogContent, IconButton, Box, TextField, MenuItem, Select, FormControl, Chip } from '@mui/material';
+import { Dialog, DialogContent, IconButton, Box, TextField } from '@mui/material';
 import { useStore } from '../../context/InventoryStore.js';
 import Button from '../shared/Button.jsx';
+import MultiSelectDropdown from '../shared/MultiSelectDropdown.jsx';
+import StatusDropdown from '../shared/StatusDropdown.jsx';
 
 const categories = ['Sidewalk Shed', 'Scaffold', 'Shoring'];
 
@@ -93,7 +95,7 @@ export default function CreateJobsiteModal({ onClose }) {
 
                 {/* CATEGORY INCLUDED AND STATUS */}
                 <Box sx={{ display: 'flex', gap: '12px', marginBottom: '16px' }}>
-                    <FormControl sx={{ flex: 1 }}>
+                    <Box sx={{ flex: 2 }}>
                         <label style={{
                             fontSize: '13px',
                             fontWeight: 500,
@@ -103,40 +105,15 @@ export default function CreateJobsiteModal({ onClose }) {
                         }}>
                             Category Included
                         </label>
-                        <Select
-                            multiple
-                            value={selectedCategories}
-                            onChange={(e) => setSelectedCategories(e.target.value)}
-                            displayEmpty
-                            renderValue={(selected) => {
-                                if (selected.length === 0) {
-                                    return <span style={{ color: '#999' }}>Select categories</span>;
-                                }
-                                return (
-                                    <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
-                                        {selected.map((value) => (
-                                            <Chip key={value} label={value} size="small" />
-                                        ))}
-                                    </Box>
-                                );
-                            }}
-                            sx={{
-                                backgroundColor: '#f5f5f5',
-                                borderRadius: '8px',
-                                '& .MuiOutlinedInput-notchedOutline': {
-                                    border: 'none'
-                                }
-                            }}
-                        >
-                            {categories.map((category) => (
-                                <MenuItem key={category} value={category}>
-                                    {category}
-                                </MenuItem>
-                            ))}
-                        </Select>
-                    </FormControl>
+                        <MultiSelectDropdown
+                            options={categories}
+                            selectedOptions={selectedCategories}
+                            onSelect={(category) => setSelectedCategories([...selectedCategories, category])}
+                            onDeselect={(category) => setSelectedCategories(selectedCategories.filter(c => c !== category))}
+                        />
+                    </Box>
 
-                    <FormControl sx={{ flex: 1 }}>
+                    <Box sx={{ flex: 1 }}>
                         <label style={{
                             fontSize: '13px',
                             fontWeight: 500,
@@ -146,26 +123,11 @@ export default function CreateJobsiteModal({ onClose }) {
                         }}>
                             Status
                         </label>
-                        <Select
+                        <StatusDropdown
                             value={status}
-                            onChange={(e) => setStatus(e.target.value)}
-                            displayEmpty
-                            sx={{
-                                backgroundColor: '#f5f5f5',
-                                borderRadius: '8px',
-                                '& .MuiOutlinedInput-notchedOutline': {
-                                    border: 'none'
-                                }
-                            }}
-                        >
-                            <MenuItem value="" disabled>
-                                <span style={{ color: '#999' }}>Select status</span>
-                            </MenuItem>
-                            <MenuItem value="in-progress">In Progress</MenuItem>
-                            <MenuItem value="completed">Completed</MenuItem>
-                            <MenuItem value="on-hold">On Hold</MenuItem>
-                        </Select>
-                    </FormControl>
+                            onChange={(newStatus) => setStatus(newStatus)}
+                        />
+                    </Box>
                 </Box>
 
                 {/* BUTTONS */}

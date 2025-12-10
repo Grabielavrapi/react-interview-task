@@ -1,0 +1,234 @@
+/* Multi-Select Dropdown - modern inline chips + popover */
+
+.multi-select-container {
+  position: relative;
+  width: 100%;
+  font-family: Inter, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;
+  overflow: visible;
+}
+
+/* Trigger / field */
+.select-trigger {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 20px;
+  background: white;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: box-shadow 0.12s, border-color 0.12s;
+  outline: none;
+  overflow: visible;
+}
+
+.select-trigger:focus,
+.select-trigger.open {
+  box-shadow: 0 6px 20px rgba(2,6,23,0.08);
+  border-color: rgba(99,102,241,0.18);
+}
+
+.selected-pills-inline {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  flex: 1 1 auto;
+  align-items: center;
+  min-height: 28px;
+}
+
+.placeholder {
+  color: #9aa0a6;
+  font-size: 14px;
+}
+
+/* Chips */
+.category-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 8px;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 500;
+  color: #111827;
+  background-color: #F9FAFB; /* light */
+  border: 1px solid rgba(15,23,42,0.04);
+  white-space: nowrap;
+  transition: transform 0.12s ease, box-shadow 0.12s;
+}
+
+.category-pill:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 12px rgba(2,6,23,0.04);
+}
+
+.pill-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.pill-label {
+  max-width: 140px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* remove icon hidden by default, only show on pill hover */
+.remove-icon {
+  display: none;
+  font-size: 11px;
+  padding: 2px;
+  color: white;
+  background-color: #ef4444; /* red */
+  border-radius: 3px;
+  transition: transform 0.12s;
+  width: 16px;
+  height: 16px;
+  align-items: center;
+  justify-content: center;
+}
+
+.category-pill:hover .remove-icon {
+  display: inline-flex;
+}
+
+/* trigger end (plus icon) */
+.trigger-end {
+  flex-shrink: 0;
+}
+
+.plus-icon {
+  color: #6b7280;
+  width: 16px;
+  height: 16px;
+}
+
+/* Popover */
+.popover-menu {
+  /* position is set via inline style (fixed, with calculated top/left) */
+  max-width: 100%;
+  background: white;
+  border-radius: 10px;
+  box-shadow: 0 12px 30px rgba(2,6,23,0.12);
+  border: 1px solid rgba(15,23,42,0.06);
+  z-index: 9999;
+  padding: 8px;
+  animation: popIn 0.12s ease-out;
+}
+
+@keyframes popIn {
+  from { transform: translateY(-6px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+
+.popover-search {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 10px;
+  border-radius: 8px;
+  background: #f8fafc;
+  border: 1px solid rgba(15,23,42,0.03);
+  margin-bottom: 8px;
+}
+
+.search-icon {
+  color: #9aa0a6;
+}
+
+.search-input {
+  border: none;
+  outline: none;
+  background: transparent;
+  width: 100%;
+  font-size: 14px;
+  color: #111827;
+}
+
+.popover-list {
+  max-height: 260px;
+  overflow-y: auto;
+}
+
+.popover-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 10px;
+  cursor: pointer;
+  border-radius: 8px;
+  transition: background 0.12s;
+  font-size: 14px;
+  color: #111827;
+}
+
+.popover-item:hover {
+  background: #f8fafc;
+}
+
+.item-left {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.item-dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+}
+
+.item-text {
+  font-size: 14px;
+}
+
+.item-check {
+  color: #fff;
+  background: transparent;
+}
+
+.empty-state {
+  padding: 18px;
+  color: #6b7280;
+  text-align: center;
+  font-size: 14px;
+}
+
+/* category colors (consistent) */
+.category-pill.sidewalk-shed .pill-dot,
+.item-dot.sidewalk-shed,
+.popover-item.selected.sidewalk-shed {
+  background-color: #6ba368; /* green */
+}
+
+.category-pill.scaffold .pill-dot,
+.item-dot.scaffold,
+.popover-item.selected.scaffold {
+  background-color: #f59e0b; /* orange */
+}
+
+.category-pill.shoring .pill-dot,
+.item-dot.shoring,
+.popover-item.selected.shoring {
+  background-color: #9370db; /* purple */
+}
+
+/* selected item styles */
+.popover-item.selected {
+  color: #111827;
+  font-weight: 600;
+  background: linear-gradient(90deg, rgba(0,0,0,0.02), rgba(0,0,0,0.0));
+}
+
+/* scrollbar tweaks */
+.popover-list::-webkit-scrollbar { width: 8px; }
+.popover-list::-webkit-scrollbar-thumb { background: rgba(15,23,42,0.06); border-radius: 8px; }
+
+/* Responsive: make chips wrap nicely */
+@media (max-width: 420px) {
+  .popover-menu { width: 320px; }
+  .pill-label { max-width: 100px; }
+}
